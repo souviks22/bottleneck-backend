@@ -25,15 +25,17 @@ const userSchema = new Schema({
     },
     phone: {
         type: Number,
+        unique: true,
         minlength: 10,
         maxlength: 10
     },
     designation: {
-        type: String
+        type: String,
+        minlength: 3
     },
     organization: {
         type: String,
-        minlength: 5
+        minlength: 3
     }
 })
 

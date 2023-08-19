@@ -5,7 +5,7 @@ const algoSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        min: 5
+        minlength: 5
     },
     level: {
         type: String,
@@ -19,7 +19,13 @@ const algoSchema = new Schema({
     dislikes: {
         type: Number,
         default: 0
-    }
+    },
+    feedbacks: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Feedback'
+        }
+    ]
 })
 
 const Algorithm = model('Algorithm', algoSchema)

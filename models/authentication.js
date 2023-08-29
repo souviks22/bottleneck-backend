@@ -3,7 +3,7 @@ import User from './User.js';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import mongoose from 'mongoose';
-
+import bcrypt from 'bcrypt';
 
 const app = express();
 const port = 3000;
@@ -25,22 +25,22 @@ app.use(session({
 // Define routes for signup and signin
 app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
-    
-    try{// Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-        return res.status(400).send('User already exists');
+
+    try {// Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send('User already exists');
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // Create a new user
+        const newUser = new User({ email, password: hashedPassword });
+        await newUser.save();
+        
+        // Store user data in session
+        req.session.userId = newUser._id;
+
+        res.status(201).send('Signup successful');
     }
-
-    // Create a new user
-    const newUser = new User({ email, password });
-    await newUser.save();
-
-    // Store user data in session
-    req.session.userId = newUser._id;
-
-    res.status(201).send('Signup successful');
-}
     catch (error) {
         // Handle validation errors
         if (error.name === 'ValidationError') {
@@ -54,10 +54,16 @@ app.post('/signup', async (req, res) => {
 
 app.post('/signin', async (req, res) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
 
-    if (!user || password != user.password) {
-        return res.status(401).send('Invalid email or password');
+    const user = await User.findOne({ email });
+    if (!user){
+        return res.status(401).send('User not registered')
+    }
+    const plainPassword = password;
+    const hashedPassword = user.password; 
+    const passwordMatch = await bcrypt.compare(plainPassword, hashedPassword);
+    if (!passwordMatch) {
+        return res.status(401).send('Invalid password');
     }
 
     // Store user data in session

@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import mongoose from 'mongoose';
 
+
 const app = express();
 const port = 3000;
 const DB_URL = 'mongodb+srv://souvik:WIqYCzzIRuQK38wQ@cluster0.b4ncaw0.mongodb.net/?retryWrites=true&w=majority';
@@ -24,11 +25,13 @@ app.use(session({
 // Define routes for signup and signin
 app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
-    // Check if the user already exists
+    
+    try{// Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         return res.status(400).send('User already exists');
     }
+
     // Create a new user
     const newUser = new User({ email, password });
     await newUser.save();
@@ -37,6 +40,16 @@ app.post('/signup', async (req, res) => {
     req.session.userId = newUser._id;
 
     res.status(201).send('Signup successful');
+}
+    catch (error) {
+        // Handle validation errors
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ error: error.message });
+        }
+        // Handle other errors
+        console.error(error);
+        res.status(500).send('Internal server error');
+    }
 });
 
 app.post('/signin', async (req, res) => {
@@ -55,3 +68,5 @@ app.post('/signin', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+

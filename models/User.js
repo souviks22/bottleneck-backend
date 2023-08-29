@@ -26,6 +26,7 @@ const userSchema = new Schema({
     phone: {
         type: Number,
         unique: true,
+        sparse: true,
         validate: {
             validator: function(v) {
                 // Use a regular expression to match exactly 10 digits

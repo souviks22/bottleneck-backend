@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
-import User from "../models/User"
-import catchAsync from "../errors/async"
+import User from "../models/User.js"
+import catchAsync from "../errors/async.js"
 
 export const signupHandler = catchAsync(async (req, res) => {
     const { email, password } = req.body

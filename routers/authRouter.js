@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { body, header } from "express-validator"
-import { signupHandler, signinHandler, signoutHandler } from "../controllers/auth"
+import { signupHandler, signinHandler, signoutHandler } from "../controllers/auth.js"
 
 const authRouter = Router()
 

@@ -1,14 +1,11 @@
 const catchAsync = handler => {
-    return (req, res) => {
-        handler(req, res).catch(error => {
-            const response = {
+    return (req, res, next) => {
+        handler(req, res, next).catch(error => {
+            const code = error.name === 'ValidationError' ? 400 : 500
+            res.status(code).json({
                 success: false,
                 message: error.message
-            }
-            // Handle validation errors
-            if (error.name === 'ValidationError') return res.status(400).json(response)
-            // Handle internal errors
-            res.status(500).json(response)
+            })
         })
     }
 }

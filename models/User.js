@@ -1,37 +1,29 @@
 import { Schema, model } from "mongoose"
-
-const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/
-const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-const phoneRegex = /\d{10}/
+import { regex } from "../validation/regex.js"
 
 const userSchema = new Schema({
     email: {
         type: String,
         required: true,
         unique: true,
-        match: emailRegex
+        match: regex.email
     },
     password: {
         type: String,
-        required: true,
-        match: passwordRegex
+        required: true
     },
     firstname: {
         type: String,
-        minlength: 3
+        minlength: 2
     },
     lastname: {
         type: String,
-        minlength: 3
+        minlength: 2
     },
     phone: {
-        type: Number,
+        type: String,
         unique: true,
-        sparse: true,
-        validate: {
-            validator: value => phoneRegex.test(value),
-            message: props => `${props.value} is not a valid 10-digit phone number!`
-        }
+        match: regex.phone
     },
     designation: {
         type: String,

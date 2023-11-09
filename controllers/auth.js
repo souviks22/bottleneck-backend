@@ -1,49 +1,43 @@
-import bcrypt from "bcrypt"
 import User from "../models/User.js"
 import catchAsync from "../errors/async.js"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+
+import { regex, message } from "../validation/regex.js"
 
 export const signupHandler = catchAsync(async (req, res) => {
     const { email, password } = req.body
-    // Check if the user already exists
     const existingUser = await User.findOne({ email })
-    if (existingUser) return res.status(400).json({
-        success: false,
-        message: 'User already exists'
-    })
-    const hashedPassword = await bcrypt.hash(password, 10)
-    // Create a new user
+    if (existingUser) throw new Error('You are already registered and may sign-in instead')
+    if (!regex.password.test(password)) throw new Error(message.password)
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS))
     const newUser = new User({ email, password: hashedPassword })
     await newUser.save()
+    const token = jwt.sign({ _id: newUser._id }, process.env.TOKEN_SECRET)
     res.status(201).json({
         success: true,
-        message: 'Signup successful'
+        message: 'You are successfully signed up',
+        data: { token }
     })
 })
 
 export const signinHandler = catchAsync(async (req, res) => {
     const { email, password } = req.body
-    // Check if the user exists or not
     const user = await User.findOne({ email })
-    if (!user) return res.status(400).json({
-        success: false,
-        message: 'User not registered'
-    })
-    const hashedPassword = user.password
-    // Check password if correct or not
-    const passwordMatch = await bcrypt.compare(password, hashedPassword);
-    if (!passwordMatch) return res.status(401).json({
-        success: false,
-        message: 'Invalid password'
-    })
+    if (!user) throw new Error('Incorrect email or password')
+    const passwordIsMatched = await bcrypt.compare(password, user.password);
+    if (!passwordIsMatched) throw new Error('Incorrect email or password')
+    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
     res.status(200).json({
         success: true,
-        message: 'Signin successful'
+        message: 'You are successfully signed in',
+        data: { token }
     })
 })
 
 export const signoutHandler = catchAsync(async (req, res) => {
     res.status(200).json({
         success: true,
-        message: 'Signout successful'
+        message: 'You are successfully signed out'
     })
 })

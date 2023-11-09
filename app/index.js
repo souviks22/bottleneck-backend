@@ -16,4 +16,4 @@ app.use(express.json())
 app.use('/', authRouter)
 app.use('/users', userRouter)
 
-app.listen(process.env.PORT, () => console.log('Up and Running'))
+app.listen(process.env.PORT, () => console.log('Server is ready'))

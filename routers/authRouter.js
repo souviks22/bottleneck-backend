@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { body, header } from "express-validator"
 import { signupHandler, signinHandler, signoutHandler } from "../controllers/auth.js"
+import { isAuthorized } from "../middlewares/auth.js"
 
 const authRouter = Router()
 
@@ -17,7 +18,8 @@ authRouter.post('/signin',
 )
 
 authRouter.get('/signout',
-    header('Authentication').notEmpty(),
+    header('authorization').notEmpty(),
+    isAuthorized,
     signoutHandler
 )
 

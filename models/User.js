@@ -6,31 +6,40 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true,
         match: regex.email
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     firstname: {
         type: String,
+        trim: true,
         minlength: 2
     },
     lastname: {
         type: String,
+        trim: true,
         minlength: 2
     },
     phone: {
         type: String,
         unique: true,
+        sparse: true,
+        index: true,
+        trim: true,
         match: regex.phone
     },
     designation: {
         type: String,
+        trim: true,
         minlength: 3
     },
     organization: {
         type: String,
+        trim: true,
         minlength: 3
     }
 })

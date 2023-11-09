@@ -1,4 +1,4 @@
-import catchAsync from "../errors/async"
+import catchAsync from "../errors/async.js"
 import jwt from "jsonwebtoken"
 
 export const isAuthorized = catchAsync(async (req, res, next) => {

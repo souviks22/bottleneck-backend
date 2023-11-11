@@ -5,6 +5,10 @@ const reportSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    objection: {
+        type: String,
+        required: true
     }
 })
 

@@ -32,6 +32,10 @@ const userSchema = new Schema({
         trim: true,
         match: regex.phone
     },
+    image: {
+        type: String,
+        default: 'https://res.cloudinary.com/dmoyqi6br/image/upload/v1699707627/bottleneck/user_1177568_c8gc1b.png'
+    },
     designation: {
         type: String,
         trim: true,

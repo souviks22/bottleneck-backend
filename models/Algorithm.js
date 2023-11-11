@@ -1,25 +1,40 @@
 import { Schema, model } from "mongoose"
 
-const algoSchema = new Schema({
-    title: {
+const algorithmSchema = new Schema({
+    name: {
         type: String,
         required: true,
-        unique: true,
-        minlength: 5
+        unique: true
     },
-    level: {
+    difficulty: {
         type: String,
         required: true,
         enum: ['Easy', 'Medium', 'Hard']
     },
-    likes: {
-        type: Number,
-        default: 0
+    image: {
+        type: String,
+        required: true
     },
-    dislikes: {
-        type: Number,
-        default: 0
+    description: {
+        type: String,
+        required: true
     },
+    media: {
+        type: String,
+        required: true
+    },
+    likes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    dislikes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     feedbacks: [
         {
             type: Schema.Types.ObjectId,
@@ -28,5 +43,5 @@ const algoSchema = new Schema({
     ]
 })
 
-const Algorithm = model('Algorithm', algoSchema)
+const Algorithm = model('Algorithm', algorithmSchema)
 export default Algorithm

@@ -17,7 +17,7 @@ export const signupHandler = catchAsync(async (req, res) => {
     res.status(201).json({
         success: true,
         message: 'You are successfully signed up',
-        data: { token }
+        data: { token, _id: newUser._id }
     })
 })
 
@@ -31,7 +31,7 @@ export const signinHandler = catchAsync(async (req, res) => {
     res.status(200).json({
         success: true,
         message: 'You are successfully signed in',
-        data: { token }
+        data: { token, _id: user._id }
     })
 })
 

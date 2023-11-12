@@ -34,7 +34,7 @@ const userSchema = new Schema({
     },
     image: {
         type: String,
-        default: 'https://res.cloudinary.com/dmoyqi6br/image/upload/v1699707627/bottleneck/user_1177568_c8gc1b.png'
+        default: 'https://res.cloudinary.com/dmoyqi6br/image/upload/v1699707627/bottleneck/user.png'
     },
     designation: {
         type: String,

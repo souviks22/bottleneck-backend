@@ -12,9 +12,7 @@ export const fetchFieldsHandler = catchAsync(async (req, res) => {
 })
 
 export const fetchAlgorithmsHandler = catchAsync(async (req, res) => {
-    const fields = await Field.find().populate('algorithms')
-    const algorithms = []
-    for (const field of fields) algorithms.push(...field.algorithms)
+    const algorithms = await Algorithm.find()
     res.status(200).json({
         success: true,
         message: 'All fields retrieved',

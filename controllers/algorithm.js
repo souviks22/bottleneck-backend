@@ -1,4 +1,5 @@
 import Algorithm from "../models/Algorithm.js"
+import Field from "../models/Field.js"
 import catchAsync from "../errors/async.js"
 import jwt from "jsonwebtoken"
 
@@ -14,10 +15,11 @@ export const fetchAlgorithmsHandler = catchAsync(async (req, res) => {
 export const fetchSingleAlgorithmHandler = catchAsync(async (req, res) => {
     const { algoId } = req.params
     const algorithm = await Algorithm.findById(algoId).populate(['likes', 'dislikes'])
+    const field = await Field.findOne({ algorithms: algorithm })
     res.status(200).json({
         success: true,
         message: `${algorithm.name} algorithm retrieved`,
-        data: { algorithm }
+        data: { algorithm, field }
     })
 })
 

@@ -13,7 +13,7 @@ export const fetchAlgorithmsHandler = catchAsync(async (req, res) => {
 
 export const fetchSingleAlgorithmHandler = catchAsync(async (req, res) => {
     const { algoId } = req.params
-    const algorithm = await Algorithm.findById(algoId).populate(['likes', 'dislikes', 'feedbacks'])
+    const algorithm = await Algorithm.findById(algoId).populate(['likes', 'dislikes'])
     res.status(200).json({
         success: true,
         message: `${algorithm.name} algorithm retrieved`,

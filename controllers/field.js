@@ -13,9 +13,7 @@ export const fetchFieldsHandler = catchAsync(async (req, res) => {
 
 export const fetchAlgorithmsOfFieldHandler = catchAsync(async (req, res) => {
     const { fieldId } = req.params
-    const fieldDoesExist = await Field.findById(fieldId)
-    if (!fieldDoesExist) throw new Error('The required field does not exist')
-    const field = await fieldDoesExist.populate('algorithms')
+    const field = await Field.findById(fieldId).populate('algorithms')
     res.status(200).json({
         success: true,
         message: `All algorithms of field ${field.name} retrieved`,
@@ -34,9 +32,7 @@ export const addFieldHandler = catchAsync(async (req, res) => {
 
 export const addAlgorithmHandler = catchAsync(async (req, res) => {
     const { fieldId } = req.params
-    const fieldDoesExist = await Field.findById(fieldId)
-    if (!fieldDoesExist) throw new Error('The required field does not exist')
-    const field = await fieldDoesExist.populate('algorithms')
+    const field = await Field.findById(fieldId).populate('algorithms')
     const algorithm = new Algorithm(req.body)
     await algorithm.save()
     field.algorithms.push(algorithm)

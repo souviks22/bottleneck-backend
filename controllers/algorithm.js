@@ -13,9 +13,7 @@ export const fetchAlgorithmsHandler = catchAsync(async (req, res) => {
 
 export const fetchSingleAlgorithmHandler = catchAsync(async (req, res) => {
     const { algoId } = req.params
-    const algorithmDoesExist = await Algorithm.findById(algoId)
-    if (!algorithmDoesExist) throw new Error('The required algorithm does not exist')
-    const algorithm = await algorithmDoesExist.populate(['likes', 'dislikes', 'feedbacks'])
+    const algorithm = await Algorithm.findById(algoId).populate(['likes', 'dislikes', 'feedbacks'])
     res.status(200).json({
         success: true,
         message: `${algorithm.name} algorithm retrieved`,
@@ -26,7 +24,6 @@ export const fetchSingleAlgorithmHandler = catchAsync(async (req, res) => {
 export const likeAlgorithmHandler = catchAsync(async (req, res) => {
     const { algoId } = req.params
     const algorithm = await Algorithm.findById(algoId)
-    if (!algorithm) throw new Error('The required algorithm does not exist')
     const { _id: userId } = jwt.decode(req.headers.authorization.split(' ')[1])
     const userDidLike = algorithm.likes.includes(userId)
     if (userDidLike) await algorithm.updateOne({ $pull: { likes: userId } })
@@ -41,7 +38,6 @@ export const likeAlgorithmHandler = catchAsync(async (req, res) => {
 export const dislikeAlgorithmHandler = catchAsync(async (req, res) => {
     const { algoId } = req.params
     const algorithm = await Algorithm.findById(algoId)
-    if (!algorithm) throw new Error('The required algorithm does not exist')
     const { _id: userId } = jwt.decode(req.headers.authorization.split(' ')[1])
     const userDidDislike = algorithm.dislikes.includes(userId)
     if (userDidDislike) await algorithm.updateOne({ $pull: { dislikes: userId } })

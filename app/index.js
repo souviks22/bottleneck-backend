@@ -3,8 +3,9 @@ import dotenv from "dotenv"
 import mongoose from "mongoose"
 import authRouter from "../routers/authRouter.js"
 import userRouter from "../routers/userRouter.js"
-import algorithmRouter from "../routers/algorithmRouter.js"
 import fieldRouter from "../routers/fieldRouter.js"
+import algorithmRouter from "../routers/algorithmRouter.js"
+import feedbackRouter from "../routers/feedbackRouter.js"
 
 const app = express()
 dotenv.config()
@@ -17,7 +18,8 @@ app.use(express.json())
 
 app.use('/', authRouter)
 app.use('/users', userRouter)
-app.use('/algorithms', algorithmRouter)
 app.use('/fields', fieldRouter)
+app.use('/algorithms', algorithmRouter)
+app.use('/algorithms/:algoId/feedbacks', feedbackRouter)
 
 app.listen(process.env.PORT, () => console.log('Server is ready'))

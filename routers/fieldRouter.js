@@ -2,6 +2,7 @@ import { Router } from "express"
 import { body, header } from "express-validator"
 import { fetchFieldsHandler, fetchAlgorithmsOfFieldHandler, addFieldHandler, addAlgorithmHandler } from "../controllers/field.js"
 import { isAuthorized } from "../middlewares/auth.js"
+import { fieldDoesExist } from "../middlewares/existence.js"
 
 const fieldRouter = Router()
 
@@ -14,6 +15,7 @@ fieldRouter.get('/',
 fieldRouter.get('/:fieldId',
     header('authorization').notEmpty(),
     isAuthorized,
+    fieldDoesExist,
     fetchAlgorithmsOfFieldHandler
 )
 
@@ -33,6 +35,7 @@ fieldRouter.post('/:fieldId',
     body('media').notEmpty(),
     header('authorization').notEmpty(),
     isAuthorized,
+    fieldDoesExist,
     addAlgorithmHandler
 )
 

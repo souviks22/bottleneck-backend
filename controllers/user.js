@@ -15,11 +15,12 @@ export const fetchUserHandler = catchAsync(async (req, res) => {
 export const updateUserHandler = catchAsync(async (req, res) => {
     const { id } = req.params
     const { update } = req.body
-    const user = await User.findByIdAndUpdate(id, update, { runValidators: true })
+    const user = await User.findByIdAndUpdate(id, update, { runValidators: true, new: true })
     if (!user) throw new Error('No user exists')
     res.status(200).json({
         success: true,
-        message: 'Your details are updated'
+        message: 'Your details are updated',
+        data: { user }
     })
 })
 
